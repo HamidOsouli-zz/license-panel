@@ -13,10 +13,15 @@ import {
 const { SubMenu } = Menu
 const { Sider } = Layout
 
+const getActiveMenu = pagePath => {
+  return window.location.pathname.replace('/', '') || 'home'
+}
+
 class Sidebar extends React.Component {
 
   state = {
-    collapsed: false
+    collapsed: false,
+    activeMenu: getActiveMenu(),
   }
 
   onCollapse = collapsed => {
@@ -27,7 +32,7 @@ class Sidebar extends React.Component {
     return (
       <Sider className="App-sidebar" collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
         <div className="logo" />
-        <Menu theme="dark" defaultSelectedKeys={['home']} mode="inline">
+        <Menu theme="dark" defaultSelectedKeys={[this.state.activeMenu]} mode="inline">
           <Menu.Item key="home">
             <Link to='/'>
               <HomeOutlined />
@@ -40,7 +45,7 @@ class Sidebar extends React.Component {
               <span>Lisences</span>
             </Link>
           </Menu.Item>
-          <Menu.Item key="newLicense">
+          <Menu.Item key="new-license">
             <Link to='/new-license'>
               <PlusOutlined />
               <span>New License</span>

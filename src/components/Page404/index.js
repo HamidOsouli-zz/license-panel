@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
-import { Result } from 'antd'
+import { Result, Button } from 'antd'
 
 class Page404 extends Component {
   render() {
@@ -9,6 +10,14 @@ class Page404 extends Component {
         status="404"
         title="404"
         subTitle="Sorry, the page you visited does not exist."
+        extra={[
+          <Link to="/licenses" key="licenses">
+            <Button type="primary">LICENSES</Button>
+          </Link>,
+          <Link to="/licenses" key="new_license">
+            <Button type="primary">NEW LICENSE</Button>
+          </Link>,
+        ]}
       />
     )
   }
