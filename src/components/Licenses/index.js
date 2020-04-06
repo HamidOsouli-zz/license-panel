@@ -21,10 +21,6 @@ function confirm() {
   message.success('Click on Yes');
 }
 
-function cancel() {
-  message.error('Click on No');
-}
-
 const columns = [
   {
     title: 'ID',
@@ -81,31 +77,33 @@ const columns = [
     fixed: 'right',
     align: 'center',
     render: (text, record) => {
-      return (
-        <>
-          <Popconfirm
-            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-            title="Are you sure?"
-            onConfirm={confirm}
-            onCancel={cancel}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button type="link" size="small">CONFIRM</Button>
-          </Popconfirm>
+      if (record.license_status === 'pending') {
+        return (
+          <>
+            <Popconfirm
+              icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+              title="Are you sure?"
+              onConfirm={confirm}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="link" size="small">CONFIRM</Button>
+            </Popconfirm>
 
-          <Popconfirm
-            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-            title="Are you sure?"
-            onConfirm={confirm}
-            onCancel={cancel}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button type="link" danger size="small">REJECT</Button>
-          </Popconfirm>
-        </>
-      )
+            <Popconfirm
+              icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+              title="Are you sure?"
+              onConfirm={confirm}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="link" danger size="small">REJECT</Button>
+            </Popconfirm>
+          </>
+        )
+      } else {
+        return null
+      }
     },
   },
 ];
@@ -117,7 +115,7 @@ const data = [
     expire_date: 202012312359,
     operating_system: 'Android',
     user: 'FARZAD',
-    license_status: 'Pending',
+    license_status: 'pending',
   },
   {
     id: '2',
@@ -157,7 +155,7 @@ const data = [
     expire_date: 202012312359,
     operating_system: 'Android',
     user: 'FARZAD',
-    license_status: 'Pending',
+    license_status: 'pending',
   },
   {
     id: '2',
@@ -197,7 +195,7 @@ const data = [
     expire_date: 202012312359,
     operating_system: 'Android',
     user: 'FARZAD',
-    license_status: 'Pending',
+    license_status: 'pending',
   },
   {
     id: '2',
@@ -243,7 +241,7 @@ class Licenses extends React.Component {
           subTitle="List of the LICENSES"
         />
         <Divider dashed />
-        <Table 
+        <Table
           columns={columns}
           dataSource={data}
           rowKey={record => record.id}

@@ -3,10 +3,35 @@ import { Link } from 'react-router-dom'
 
 import authClient from '../../lib/Auth'
 
-import { PageHeader, Divider, Result, Button } from 'antd'
-import { HomeTwoTone } from '@ant-design/icons'
+import { PageHeader, Divider, Result, Button, Modal, Form, Input, message } from 'antd'
+import { HomeTwoTone, UserOutlined, LockOutlined, LoginOutlined, LogoutOutlined } from '@ant-design/icons'
 
 class Home extends Component {
+  state = { visible: false };
+
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  };
+
+  handleFinish = values => {
+    if (authClient.signIn(values)) {
+      this.props.history.push('/')
+      this.setState({
+        visible: false,
+      });
+    } else {
+      message.error('Wrong USERNAME or PASSWORD')
+    }
+  };
+
+  handleCancel = () => {
+    this.setState({
+      visible: false,
+    });
+  };
+
   render() {
     return (
       <>
@@ -14,32 +39,63 @@ class Home extends Component {
           className="site-page-header"
           title="HOME"
         />
+        
         <Divider dashed />
 
-        {authClient.isAuthenticated() ? (
-          <Result
+        <Result
           icon={<HomeTwoTone />}
-          title="WELCOME TO THE LICENSES PANEL"
-          extra={[
-            <Link to="/licenses" key="licenses">
-              <Button type="primary">LICENSES</Button>
-            </Link>,
-            <Link to="/licenses" key="new_license">
-              <Button type="primary">NEW LICENSE</Button>
-            </Link>,
-          ]}
+          title="WELCOME TO THE LICENSE PANEL"
+          extra={authClient.isAuthenticated() ? (
+            [
+              <Link to="/licenses" key="licenses">
+                <Button type="primary">LICENSES</Button>
+              </Link>,
+              <Link to="/licenses" key="new_license">
+                <Button type="primary">NEW LICENSE</Button>
+              </Link>,
+            ]
+          ) : (
+              [
+                <Button type="primary" key="login" onClick={this.showModal}> <LoginOutlined /> LOG IN</Button>
+              ]
+            )
+          }
         />
-        ) : (
-          <Result
-          icon={<HomeTwoTone />}
-          title="WELCOME TO THE LICENSES PANEL"
-          extra={[
-            <Link to="/licenses" key="licenses">
-              <Button type="primary">LOG IN</Button>
-            </Link>
-          ]}
-        />
-        )}
+
+        <Modal
+          title="LOG IN"
+          visible={this.state.visible}
+          onCancel={this.handleCancel}
+          footer={null}
+        >
+          <Form
+            name="normal_login"
+            className="login-form"
+            initialValues={{ remember: true }}
+            onFinish={this.handleFinish}
+          >
+            <Form.Item
+              name="username"
+              rules={[{ required: true, message: 'Please input your Username!' }]}
+            >
+              <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+            </Form.Item>
+            <Form.Item
+              name="password"
+              rules={[{ required: true, message: 'Please input your Password!' }]}
+            >
+              <Input
+                prefix={<LockOutlined className="site-form-item-icon" />}
+                type="password"
+                placeholder="Password"
+              />
+            </Form.Item>
+
+            <Form.Item>
+              <Button block type="primary" htmlType="submit" className="login-form-button"> <LoginOutlined /> LOG IN</Button>
+            </Form.Item>
+          </Form>
+        </Modal>
       </>
     );
   }

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Layout, Menu } from 'antd'
+import authClient from '../../lib/Auth'
 
 import {
   PlusOutlined,
@@ -39,18 +40,20 @@ class Sidebar extends React.Component {
               <span>Home</span>
             </Link>
           </Menu.Item>
-          <Menu.Item key="licenses">
+
+          <Menu.Item key="licenses" disabled={!authClient.isAuthenticated()}>
             <Link to='/licenses'>
               <OrderedListOutlined />
               <span>Lisences</span>
             </Link>
           </Menu.Item>
-          <Menu.Item key="new-license">
+          <Menu.Item key="new-license" disabled={!authClient.isAuthenticated()}>
             <Link to='/new-license'>
               <PlusOutlined />
               <span>New License</span>
             </Link>
           </Menu.Item>
+
           <SubMenu
             key="sub1"
             title={

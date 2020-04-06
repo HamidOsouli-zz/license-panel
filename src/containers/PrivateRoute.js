@@ -1,18 +1,15 @@
-import React, { useEffect } from 'react'
-import { Route } from 'react-router-dom'
+import React from 'react'
+import { Route, Redirect } from 'react-router-dom'
 import authClient from '../lib/Auth'
 import PropTypes from 'prop-types'
 
 const PrivateRoute = ({ component: Component, path }) => {
-  useEffect(() => {
-    if (authClient.isAuthenticated()) {
-      authClient.signIn()
-    }
-  }, [])
+  if (!authClient.isAuthenticated()) {
+    return <Redirect to="/" />
+  }
 
   const render = props => <Component {...props} />
-
-  return <Route path={path} render={render} />
+  return <Route exact path={path} render={render} />
 }
 
 PrivateRoute.propTypes = {

@@ -1,13 +1,13 @@
 import React from 'react'
 import {
-  BrowserRouter as Router,
   Switch,
   withRouter,
   Route
 } from 'react-router-dom'
 import authClient from '../../lib/Auth'
 
-import { Layout } from 'antd';
+import { Layout, Button, Tooltip } from 'antd'
+import { LogoutOutlined } from '@ant-design/icons'
 
 import PrivateRoute from '../../containers/PrivateRoute'
 import Home from '../Home'
@@ -20,13 +20,31 @@ const { Content } = Layout;
 
 class App extends React.Component {
   componentWillReceiveProps(nextProps) {
-    if (authClient.isAuthenticated()) {
-      console.log('user hast')
-    } else {
-      if(this.props.location.pathname !== nextProps.location.pathname) {
-        console.log('user nist')
+    if (this.props.location.pathname !== nextProps.location.pathname) {
+      if (authClient.isAuthenticated()) {
+      } else {
         this.props.history.push('/')
       }
+    }
+  }
+
+  handlelogout = () => {
+    if (authClient.signOut()) {
+      this.props.history.push('/')
+    }
+  }
+
+  logoutBtn() {
+    if (authClient.isAuthenticated()) {
+      console.log('inja')
+      return (
+        <div className="App-user-info">
+          <span>{authClient.getUserName()}</span>
+          <Tooltip title="LOGOUT" placement="topRight">
+            <Button onClick={() => this.handlelogout()} type="link" size="small" title="SIGNOUT"> <LogoutOutlined /></Button>
+          </Tooltip>
+        </div>
+      )
     }
   }
 
@@ -36,6 +54,7 @@ class App extends React.Component {
         <Sidebar />
         <Layout className="site-layout">
           <Content className="App-content">
+            {this.logoutBtn()}
             <Switch>
               <Route path="/" exact component={Home} />
               <PrivateRoute path="/licenses" component={Licenses} />

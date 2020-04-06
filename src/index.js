@@ -1,16 +1,17 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter } from 'react-router-dom'
+import { Router } from 'react-router-dom'
 import './index.css'
 import 'antd/dist/antd.css'
 import * as serviceWorker from './serviceWorker'
+import history from './helper/history';
 
 import App from './components/App'
 
 ReactDOM.render(
-  <BrowserRouter>
+  <Router history={history}>
     <App />
-  </BrowserRouter>,
+  </Router>,
   document.getElementById('root')
 )
 

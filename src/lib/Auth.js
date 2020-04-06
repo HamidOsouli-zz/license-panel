@@ -1,6 +1,6 @@
 class Auth {
   constructor() {
-    this.getProfile = this.getProfile.bind(this)
+    this.getUserName = this.getUserName.bind(this)
     this.isAuthenticated = this.isAuthenticated.bind(this)
     this.signIn = this.signIn.bind(this)
     this.signOut = this.signOut.bind(this)
@@ -8,37 +8,47 @@ class Auth {
     this.getUserFromLocalStorage = this.getUserFromLocalStorage.bind(this)
   }
 
-  getProfile() {
-    return this.profile
+  getUserName() {
+    const user = this.getUserFromLocalStorage()
+    return user.name
   }
 
   isAuthenticated() {
-    return false
     const user = this.getUserFromLocalStorage()
-    if (user !== null) {
-      const expiresAt = user.exp * 1000
-      if (new Date().getTime() < expiresAt) {
-        return new Date().getTime() < expiresAt
+    if (user) {
+      if (user.expiresAt > new Date().getTime()) {
+        return true
       } else {
-        localStorage.clear()
+        return false
       }
     }
-    return new Date().getTime() < this.expiresAt * 1000
   }
 
-  signIn() {
-    // this.signOut()
+  signIn(values) {
+    const nowDate = new Date()
+    const hour = nowDate.getHours()
+    const expireDate = nowDate.setHours(hour + 1)
+
+    if (values.username === 'user1' && values.password === '123') {
+      const user = {
+        name: values.username,
+        role: 'user',
+        expiresAt: expireDate
+      }
+      this.setUserToLocalStorage(user)
+      return true
+    } else {
+      return false
+    }
   }
 
   signOut() {
     localStorage.clear()
-    this.idToken = null
-    this.profile = null
-    this.expiresAt = null
+    return true
   }
 
   setUserToLocalStorage(user) {
-    // localStorage.setItem('user', JSON.stringify(user))
+    localStorage.setItem('user', JSON.stringify(user))
   }
 
   getUserFromLocalStorage() {
