@@ -1,11 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import 'antd/dist/antd.css'
 import * as serviceWorker from './serviceWorker'
 
 import App from './components/App'
-import { BrowserRouter } from 'react-router-dom'
 
 ReactDOM.render(
   <BrowserRouter>

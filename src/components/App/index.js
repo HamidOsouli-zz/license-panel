@@ -2,8 +2,10 @@ import React from 'react'
 import {
   BrowserRouter as Router,
   Switch,
-  withRouter
+  withRouter,
+  Route
 } from 'react-router-dom'
+import authClient from '../../lib/Auth'
 
 import { Layout } from 'antd';
 
@@ -17,23 +19,32 @@ import Page404 from '../Page404'
 const { Content } = Layout;
 
 class App extends React.Component {
+  componentWillReceiveProps(nextProps) {
+    if (authClient.isAuthenticated()) {
+      console.log('user hast')
+    } else {
+      if(this.props.location.pathname !== nextProps.location.pathname) {
+        console.log('user nist')
+        this.props.history.push('/')
+      }
+    }
+  }
+
   render() {
     return (
-      <Router>
-        <Layout className="App" style={{ minHeight: '100vh' }}>
-          <Sidebar />
-          <Layout className="site-layout">
-            <Content className="App-content">
-              <Switch>
-                <PrivateRoute path="/" exact component={Home} />
-                <PrivateRoute path="/licenses" component={Licenses} />
-                <PrivateRoute path="/new-license" component={NewLicense} />
-                <PrivateRoute path="*" component={Page404} />
-              </Switch>
-            </Content>
-          </Layout>
+      <Layout className="App" style={{ minHeight: '100vh' }}>
+        <Sidebar />
+        <Layout className="site-layout">
+          <Content className="App-content">
+            <Switch>
+              <Route path="/" exact component={Home} />
+              <PrivateRoute path="/licenses" component={Licenses} />
+              <PrivateRoute path="/new-license" component={NewLicense} />
+              <Route path="*" component={Page404} />
+            </Switch>
+          </Content>
         </Layout>
-      </Router>
+      </Layout>
     );
   }
 }

@@ -1,5 +1,3 @@
-// src/components/PrivateRoute.js
-
 import React, { useEffect } from 'react'
 import { Route } from 'react-router-dom'
 import authClient from '../lib/Auth'
@@ -7,7 +5,7 @@ import PropTypes from 'prop-types'
 
 const PrivateRoute = ({ component: Component, path }) => {
   useEffect(() => {
-    if (!authClient.isAuthenticated()) {
+    if (authClient.isAuthenticated()) {
       authClient.signIn()
     }
   }, [])

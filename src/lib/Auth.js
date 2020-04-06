@@ -1,6 +1,3 @@
-import React from 'react'
-import { Redirect } from 'react-router-dom'
-
 class Auth {
   constructor() {
     this.getProfile = this.getProfile.bind(this)
@@ -16,6 +13,7 @@ class Auth {
   }
 
   isAuthenticated() {
+    return false
     const user = this.getUserFromLocalStorage()
     if (user !== null) {
       const expiresAt = user.exp * 1000
@@ -30,8 +28,6 @@ class Auth {
 
   signIn() {
     // this.signOut()
-    console.log('inja')
-    return <Redirect to='/home' />
   }
 
   signOut() {
