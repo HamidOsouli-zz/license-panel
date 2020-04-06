@@ -1,12 +1,13 @@
 import React from 'react'
 import {
   BrowserRouter as Router,
-  Route,
   Switch,
+  withRouter
 } from 'react-router-dom'
 
 import { Layout } from 'antd';
 
+import PrivateRoute from '../../containers/PrivateRoute'
 import Home from '../Home'
 import Sidebar from '../Sidebar'
 import Licenses from '../Licenses'
@@ -24,10 +25,10 @@ class App extends React.Component {
           <Layout className="site-layout">
             <Content className="App-content">
               <Switch>
-                <Route path="/" exact component={Home} />
-                <Route path="/licenses" component={Licenses} />
-                <Route path="/new-license" component={NewLicense} />
-                <Route path="*" component={Page404} />
+                <PrivateRoute path="/" exact component={Home} />
+                <PrivateRoute path="/licenses" component={Licenses} />
+                <PrivateRoute path="/new-license" component={NewLicense} />
+                <PrivateRoute path="*" component={Page404} />
               </Switch>
             </Content>
           </Layout>
@@ -37,4 +38,4 @@ class App extends React.Component {
   }
 }
 
-export default App
+export default withRouter(App)

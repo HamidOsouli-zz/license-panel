@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
+import authClient from '../../lib/Auth'
+
 import { PageHeader, Divider, Result, Button } from 'antd'
 import { HomeTwoTone } from '@ant-design/icons'
 
@@ -14,7 +16,8 @@ class Home extends Component {
         />
         <Divider dashed />
 
-        <Result
+        {authClient.isAuthenticated() ? (
+          <Result
           icon={<HomeTwoTone />}
           title="WELCOME TO THE LICENSES PANEL"
           extra={[
@@ -26,6 +29,17 @@ class Home extends Component {
             </Link>,
           ]}
         />
+        ) : (
+          <Result
+          icon={<HomeTwoTone />}
+          title="WELCOME TO THE LICENSES PANEL"
+          extra={[
+            <Link to="/licenses" key="licenses">
+              <Button type="primary">LOG IN</Button>
+            </Link>
+          ]}
+        />
+        )}
       </>
     );
   }
