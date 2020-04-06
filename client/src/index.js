@@ -9,10 +9,10 @@ import history from './helper/history';
 import App from './components/App'
 
 ReactDOM.render(
-  <Router history={history}>
-    <App />
-  </Router>,
-  document.getElementById('root')
+    <Router history={history}>
+        <App />
+    </Router>,
+    document.getElementById('root')
 )
 
 // If you want your app to work offline and load faster, you can change

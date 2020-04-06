@@ -40,7 +40,7 @@ const columns = [
     key: 'expire_date',
     align: 'center',
     render: expire_date => (
-      <span>
+        <span>
         {moment(expire_date).format('dddd, DD/MM/YYYY HH:mm:ss').toUpperCase()}
       </span>
     ),
@@ -63,7 +63,7 @@ const columns = [
     key: 'license_status',
     align: 'center',
     render: license_status => (
-      <span>
+        <span>
         <Tag color={getStatusColor(license_status)} key={license_status}>
           {license_status.toUpperCase()}
         </Tag>
@@ -79,27 +79,27 @@ const columns = [
     render: (text, record) => {
       if (record.license_status === 'pending') {
         return (
-          <>
-            <Popconfirm
-              icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-              title="Are you sure?"
-              onConfirm={confirm}
-              okText="Yes"
-              cancelText="No"
-            >
-              <Button type="link" size="small">CONFIRM</Button>
-            </Popconfirm>
+            <>
+              <Popconfirm
+                  icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                  title="Are you sure?"
+                  onConfirm={confirm}
+                  okText="Yes"
+                  cancelText="No"
+              >
+                <Button type="link" size="small">CONFIRM</Button>
+              </Popconfirm>
 
-            <Popconfirm
-              icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-              title="Are you sure?"
-              onConfirm={confirm}
-              okText="Yes"
-              cancelText="No"
-            >
-              <Button type="link" danger size="small">REJECT</Button>
-            </Popconfirm>
-          </>
+              <Popconfirm
+                  icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                  title="Are you sure?"
+                  onConfirm={confirm}
+                  okText="Yes"
+                  cancelText="No"
+              >
+                <Button type="link" danger size="small">REJECT</Button>
+              </Popconfirm>
+            </>
         )
       } else {
         return null
@@ -234,20 +234,20 @@ const data = [
 class Licenses extends React.Component {
   render() {
     return (
-      <>
-        <PageHeader
-          className="site-page-header"
-          title="LICENSES"
-          subTitle="List of the LICENSES"
-        />
-        <Divider dashed />
-        <Table
-          columns={columns}
-          dataSource={data}
-          rowKey={record => record.id}
-          pagination={{ hideOnSinglePage: true }}
-        />
-      </>
+        <>
+          <PageHeader
+              className="site-page-header"
+              title="LICENSES"
+              subTitle="List of the LICENSES"
+          />
+          <Divider dashed />
+          <Table
+              columns={columns}
+              dataSource={data}
+              rowKey={record => record.id}
+              pagination={{ hideOnSinglePage: true }}
+          />
+        </>
     );
   }
 }

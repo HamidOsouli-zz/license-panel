@@ -38,32 +38,32 @@ class App extends React.Component {
     if (authClient.isAuthenticated()) {
       console.log('inja')
       return (
-        <div className="App-user-info">
-          <span>{authClient.getUserName()}</span>
-          <Tooltip title="LOGOUT" placement="topRight">
-            <Button onClick={() => this.handlelogout()} type="link" size="small" title="SIGNOUT"> <LogoutOutlined /></Button>
-          </Tooltip>
-        </div>
+          <div className="App-user-info">
+            <span>{authClient.getUserName()}</span>
+            <Tooltip title="LOGOUT" placement="topRight">
+              <Button onClick={() => this.handlelogout()} type="link" size="small" title="SIGNOUT"> <LogoutOutlined /></Button>
+            </Tooltip>
+          </div>
       )
     }
   }
 
   render() {
     return (
-      <Layout className="App" style={{ minHeight: '100vh' }}>
-        <Sidebar />
-        <Layout className="site-layout">
-          <Content className="App-content">
-            {this.logoutBtn()}
-            <Switch>
-              <Route path="/" exact component={Home} />
-              <PrivateRoute path="/licenses" component={Licenses} />
-              <PrivateRoute path="/new-license" component={NewLicense} />
-              <Route path="*" component={Page404} />
-            </Switch>
-          </Content>
+        <Layout className="App" style={{ minHeight: '100vh' }}>
+          <Sidebar />
+          <Layout className="site-layout">
+            <Content className="App-content">
+              {this.logoutBtn()}
+              <Switch>
+                <Route path="/" exact component={Home} />
+                <PrivateRoute path="/licenses" component={Licenses} />
+                <PrivateRoute path="/new-license" component={NewLicense} />
+                <Route path="*" component={Page404} />
+              </Switch>
+            </Content>
+          </Layout>
         </Layout>
-      </Layout>
     );
   }
 }
