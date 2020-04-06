@@ -1,0 +1,68 @@
+version: '3.6'
+
+services:
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    image: license-backend
+    container_name: license_backend
+#    command: yarn nodemon src/index.js
+    volumes:
+      - ./server:/usr/src/app
+      - ./usr/src/app/node_modules
+    ports:
+      - "3030:3030"
+    depends_on:
+      - mongo
+    env_file: .env
+    environment:
+      - NODE_ENV=development
+      - MONGO_HOSTNAME=$MONGO_HOSTNAME
+      - MONGO_PORT=$MONGO_PORT
+      - MONGO_DB=$MONGO_DB
+      - MONGO_USERNAME=$MONGO_USERNAME
+      - MONGO_PASSWORD=$MONGO_PASSWORD
+    networks:
+      - license-network
+  mongo:
+    image: mongo
+    container_name: license_db
+    volumes:
+      - license-db-volume:/data/db
+      - ./db-init/:/docker-entrypoint-initdb.d
+    env_file: .env
+    environment:
+      - MONGO_INITDB_DATABASE=$MONGO_DB
+      - MONGO_INITDB_ROOT_USERNAME=$MONGO_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD
+    ports:
+      - "27017:27017"
+    networks:
+      - license-network
+  client:
+    stdin_open: true
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    image: license-client
+    container_name: license_client
+#    command: yarn start
+    volumes:
+      - ./client/:/usr/src/app
+      - /usr/app/node_modules
+    depends_on:
+      - backend
+    ports:
+      - "8088:3000"
+    networks:
+      - license-network
+
+networks:
+  license-network:
+    driver: bridge
+
+volumes:
+  license-db-volume:
+    name: license-mongodb-data
+  node_modules:
