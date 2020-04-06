@@ -11,3 +11,23 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.App-content {
+  position: relative;
+  background: #fff;
+  margin: 16px;
+  padding: 16px;
+}
+
+.App-content .App-user-info {
+  position: absolute;
+  right: 30px;
+  top: 40px;
+  z-index: 10;
+}
+
+.App-sidebar .logo {
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px;
+}
