@@ -42,11 +42,17 @@ class App extends React.Component {
     if (authClient.isAuthenticated()) {
       const user = authClient.getUserInfo()
       return (
-          <div className="App-user-info">
-            <div>USERNAME: {user.name}</div>
-            <span>ROLE: {user.role}</span>
-            <Tooltip title="LOGOUT" placement="topRight">
-              <Button onClick={() => this.handlelogout()} type="link" size="small" title="SIGNOUT"> <LogoutOutlined /></Button>
+          <div style={{ textAlign: 'right', cursor: 'pointer' }}>
+            <Tooltip title="USERNAME" placement="bottomRight">
+              <span style={{ cursor: 'pointer' }}>{user.name}</span>
+            </Tooltip>
+
+            <Tooltip title="ROLE" placement="bottomRight">
+              <span style={{ cursor: 'pointer' }}> ({user.role}) </span>
+            </Tooltip>
+
+            <Tooltip title="LOG OUT" placement="bottomRight">
+              <Button onClick={() => this.handlelogout()} type="link" size="small"><LogoutOutlined style={{ color: 'red' }} /></Button>
             </Tooltip>
           </div>
       )
