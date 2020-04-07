@@ -1,6 +1,6 @@
 class Auth {
   constructor() {
-    this.getUserName = this.getUserName.bind(this)
+    this.getUserInfo = this.getUserInfo.bind(this)
     this.isAuthenticated = this.isAuthenticated.bind(this)
     this.signIn = this.signIn.bind(this)
     this.signOut = this.signOut.bind(this)
@@ -8,9 +8,9 @@ class Auth {
     this.getUserFromLocalStorage = this.getUserFromLocalStorage.bind(this)
   }
 
-  getUserName() {
+  getUserInfo() {
     const user = this.getUserFromLocalStorage()
-    return user.name
+    return user
   }
 
   isAuthenticated() {
@@ -37,9 +37,17 @@ class Auth {
       }
       this.setUserToLocalStorage(user)
       return true
-    } else {
-      return false
+    } else if (values.username === 'admin' && values.password === '123') {
+      const user = {
+        name: values.username,
+        role: 'admin',
+        expiresAt: expireDate
+      }
+      this.setUserToLocalStorage(user)
+      return true
     }
+
+    return false
   }
 
   signOut() {

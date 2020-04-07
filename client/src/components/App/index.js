@@ -13,15 +13,19 @@ import PrivateRoute from '../../containers/PrivateRoute'
 import Home from '../Home'
 import Sidebar from '../Sidebar'
 import Licenses from '../Licenses'
-import NewLicense from '../NewLicense'
 import Page404 from '../Page404'
 
 const { Content } = Layout;
 
 class App extends React.Component {
+  state = {
+    pagePath: '',
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.props.location.pathname !== nextProps.location.pathname) {
       if (authClient.isAuthenticated()) {
+        this.setState({pagePath: nextProps.location.pathname})
       } else {
         this.props.history.push('/')
       }
@@ -36,10 +40,11 @@ class App extends React.Component {
 
   logoutBtn() {
     if (authClient.isAuthenticated()) {
-      console.log('inja')
+      const user = authClient.getUserInfo()
       return (
           <div className="App-user-info">
-            <span>{authClient.getUserName()}</span>
+            <div>USERNAME: {user.name}</div>
+            <span>ROLE: {user.role}</span>
             <Tooltip title="LOGOUT" placement="topRight">
               <Button onClick={() => this.handlelogout()} type="link" size="small" title="SIGNOUT"> <LogoutOutlined /></Button>
             </Tooltip>
@@ -51,14 +56,13 @@ class App extends React.Component {
   render() {
     return (
         <Layout className="App" style={{ minHeight: '100vh' }}>
-          <Sidebar />
+          <Sidebar pagePath={this.state.pagePath} />
           <Layout className="site-layout">
             <Content className="App-content">
               {this.logoutBtn()}
               <Switch>
                 <Route path="/" exact component={Home} />
                 <PrivateRoute path="/licenses" component={Licenses} />
-                <PrivateRoute path="/new-license" component={NewLicense} />
                 <Route path="*" component={Page404} />
               </Switch>
             </Content>

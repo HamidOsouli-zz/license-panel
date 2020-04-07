@@ -25,8 +25,8 @@ app.use(cors())
 app.use(bodyParser.json())
 // Routes
 const postRouter = require('./routes/post.router');
-app.get('/', postRouter)
-// app.use('/posts', postRouter);
+// app.get('/', postRouter)
+app.use('/posts', postRouter);
 
 
 app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`))
