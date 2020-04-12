@@ -18,8 +18,17 @@ class Home extends Component {
     })
   }
 
-  handleFinish = values => {
+  handleFinish = async (values) => {
     this.setState({isLoding: true})
+      const data = await authClient.signIn(values);
+      if (data) {
+          this.props.history.push('/');
+          this.setState({
+              visible: false,
+          });
+      } else {
+          message.error('Wrong USERNAME or PASSWORD')
+      }
     setTimeout(() => {
       if (authClient.signIn(values)) {
         this.props.history.push('/licenses')

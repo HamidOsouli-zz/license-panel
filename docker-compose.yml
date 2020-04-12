@@ -8,9 +8,10 @@ services:
     image: license-backend
     container_name: license_backend
 #    command: yarn nodemon src/index.js
+    restart: always
     volumes:
       - ./server:/usr/src/app
-      - ./usr/src/app/node_modules
+      - ./server/node_modules:/usr/src/app/node_modules
     ports:
       - "3030:3030"
     depends_on:
@@ -32,6 +33,7 @@ services:
       - license-db-volume:/data/db
       - ./db-init/:/docker-entrypoint-initdb.d
     env_file: .env
+    restart: always
     environment:
       - MONGO_INITDB_DATABASE=$MONGO_DB
       - MONGO_INITDB_ROOT_USERNAME=$MONGO_USERNAME
@@ -41,6 +43,7 @@ services:
     networks:
       - license-network
   client:
+    restart: always
     stdin_open: true
     build:
       context: ./client
@@ -50,7 +53,7 @@ services:
 #    command: yarn start
     volumes:
       - ./client/:/usr/src/app
-      - /usr/app/node_modules
+      - ./client/node_modules:/usr/app/node_modules
     depends_on:
       - backend
     ports:
