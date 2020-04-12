@@ -1,3 +1,4 @@
+import http from './http';
 class Auth {
   constructor() {
     this.getUserName = this.getUserName.bind(this)
@@ -9,12 +10,12 @@ class Auth {
   }
 
   getUserName() {
-    const user = this.getUserFromLocalStorage()
-    return user.name
+    const user = this.getUserFromLocalStorage();
+    return user.username;
   }
 
   isAuthenticated() {
-    const user = this.getUserFromLocalStorage()
+    const user = this.getUserFromLocalStorage();
     if (user) {
       if (user.expiresAt > new Date().getTime()) {
         return true
@@ -24,26 +25,24 @@ class Auth {
     }
   }
 
-  signIn(values) {
+  async signIn(values) {
     const nowDate = new Date()
     const hour = nowDate.getHours()
-    const expireDate = nowDate.setHours(hour + 1)
-
-    if (values.username === 'user1' && values.password === '123') {
-      const user = {
-        name: values.username,
-        role: 'user',
-        expiresAt: expireDate
-      }
-      this.setUserToLocalStorage(user)
-      return true
-    } else {
-      return false
+    const expireDate = nowDate.setHours(hour + 1);
+    try {
+      const res = await http.post("/user/login", JSON.stringify({
+        username: values.username,
+        password: values.password
+      }));
+      this.setUserToLocalStorage({...res.data, expiresAt: expireDate});
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 
   signOut() {
-    localStorage.clear()
+    localStorage.clear();
     return true
   }
 
@@ -52,11 +51,11 @@ class Auth {
   }
 
   getUserFromLocalStorage() {
-    const user = localStorage.getItem('user')
+    const user = localStorage.getItem('user');
     return JSON.parse(user)
   }
 }
 
-const authClient = new Auth()
+const authClient = new Auth();
 
 export default authClient

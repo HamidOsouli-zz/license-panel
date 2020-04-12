@@ -15,9 +15,10 @@ class Home extends Component {
         });
     };
 
-    handleFinish = values => {
-        if (authClient.signIn(values)) {
-            this.props.history.push('/')
+    handleFinish = async (values) => {
+        const data = await authClient.signIn(values);
+        if (data) {
+            this.props.history.push('/');
             this.setState({
                 visible: false,
             });
