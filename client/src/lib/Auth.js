@@ -1,7 +1,7 @@
 import http from './http';
 class Auth {
   constructor() {
-    this.getUserName = this.getUserName.bind(this)
+    this.getUserInfo = this.getUserInfo.bind(this)
     this.isAuthenticated = this.isAuthenticated.bind(this)
     this.signIn = this.signIn.bind(this)
     this.signOut = this.signOut.bind(this)
@@ -9,9 +9,9 @@ class Auth {
     this.getUserFromLocalStorage = this.getUserFromLocalStorage.bind(this)
   }
 
-  getUserName() {
-    const user = this.getUserFromLocalStorage();
-    return user.username;
+  getUserInfo() {
+    const user = this.getUserFromLocalStorage()
+    return user
   }
 
   isAuthenticated() {
@@ -28,7 +28,7 @@ class Auth {
   async signIn(values) {
     const nowDate = new Date()
     const hour = nowDate.getHours()
-    const expireDate = nowDate.setHours(hour + 1);
+    const expireDate = nowDate.setHours(hour + 1)
     try {
       const res = await http.post("/user/login", JSON.stringify({
         username: values.username,
