@@ -23,22 +23,36 @@ function handleConfirm() {
   message.success('Click on Yes')
 }
 
+function compareByAlph(a, b) {
+  if (a > b) {
+    return -1
+  }
+  if (a < b) {
+    return 1
+  }
+  return 0
+}
+
 const columns = [
-  // {
-  //   title: 'ID',
-  //   dataIndex: 'id',
-  //   key: 'id',
-  //   align: 'center',
-  //   width: 50,
-  //   fixed: 'left',
-  // },
+  {
+    title: 'ID',
+    dataIndex: 'id',
+    key: 'id',
+    align: 'center',
+    width: 70,
+    fixed: 'left',
+  },
   {
     title: 'License Id',
     dataIndex: 'license_id',
     key: 'license_id',
     align: 'center',
-    width: 100,
-    fixed: 'left',
+  },
+  {
+    title: 'Operating System',
+    dataIndex: 'operating_system',
+    key: 'operating_system',
+    align: 'center',
   },
   {
     title: 'Expire Date',
@@ -52,12 +66,6 @@ const columns = [
     ),
   },
   {
-    title: 'Operating System',
-    dataIndex: 'operating_system',
-    key: 'operating_system',
-    align: 'center',
-  },
-  {
     title: 'User',
     dataIndex: 'user',
     key: 'user',
@@ -68,6 +76,7 @@ const columns = [
     dataIndex: 'license_status',
     key: 'license_status',
     align: 'center',
+    sorter: (a, b) => compareByAlph(a.license_status, b.license_status),
     render: license_status => (
       <span>
         <Tag color={getStatusColor(license_status)} key={license_status}>
@@ -79,9 +88,9 @@ const columns = [
   {
     title: 'Action',
     key: 'action',
-    width: 100,
     fixed: 'right',
     align: 'center',
+    width: 100,
     render: (text, record) => {
       if (record.license_status === 'pending') {
         return (
@@ -118,7 +127,7 @@ const columns = [
 
 const data = [
   {
-    id: '1',
+    id: 1,
     license_id: 'CFZZ',
     expire_date: 202012312359,
     operating_system: 'Android',
@@ -126,7 +135,7 @@ const data = [
     license_status: 'pending',
   },
   {
-    id: '2',
+    id: 2,
     license_id: 'XASD',
     expire_date: 202012312359,
     operating_system: 'ios',
@@ -134,7 +143,7 @@ const data = [
     license_status: 'done',
   },
   {
-    id: '3',
+    id: 3,
     license_id: 'RPGR',
     expire_date: 202112312359,
     operating_system: 'windows',
@@ -142,7 +151,7 @@ const data = [
     license_status: 'rejected',
   },
   {
-    id: '4',
+    id: 4,
     license_id: 'POFW',
     expire_date: 202030062359,
     operating_system: 'osx',
@@ -150,7 +159,7 @@ const data = [
     license_status: 'done',
   },
   {
-    id: '5',
+    id: 5,
     license_id: 'POFW',
     expire_date: 202030062359,
     operating_system: 'osx',
@@ -158,7 +167,7 @@ const data = [
     license_status: 'rejected',
   },
   {
-    id: '1',
+    id: 6,
     license_id: 'CFZZ',
     expire_date: 202012312359,
     operating_system: 'Android',
@@ -166,7 +175,7 @@ const data = [
     license_status: 'pending',
   },
   {
-    id: '2',
+    id: 7,
     license_id: 'XASD',
     expire_date: 202012312359,
     operating_system: 'ios',
@@ -174,7 +183,7 @@ const data = [
     license_status: 'done',
   },
   {
-    id: '3',
+    id: 8,
     license_id: 'RPGR',
     expire_date: 202112312359,
     operating_system: 'windows',
@@ -182,7 +191,7 @@ const data = [
     license_status: 'rejected',
   },
   {
-    id: '4',
+    id: 9,
     license_id: 'POFW',
     expire_date: 202030062359,
     operating_system: 'osx',
@@ -190,7 +199,7 @@ const data = [
     license_status: 'done',
   },
   {
-    id: '5',
+    id: 10,
     license_id: 'POFW',
     expire_date: 202030062359,
     operating_system: 'osx',
@@ -198,7 +207,7 @@ const data = [
     license_status: 'rejected',
   },
   {
-    id: '1',
+    id: 11,
     license_id: 'CFZZ',
     expire_date: 202012312359,
     operating_system: 'Android',
@@ -206,7 +215,7 @@ const data = [
     license_status: 'pending',
   },
   {
-    id: '2',
+    id: 12,
     license_id: 'XASD',
     expire_date: 202012312359,
     operating_system: 'ios',
@@ -214,7 +223,7 @@ const data = [
     license_status: 'done',
   },
   {
-    id: '3',
+    id: 13,
     license_id: 'RPGR',
     expire_date: 202112312359,
     operating_system: 'windows',
@@ -222,7 +231,7 @@ const data = [
     license_status: 'rejected',
   },
   {
-    id: '4',
+    id: 14,
     license_id: 'POFW',
     expire_date: 202030062359,
     operating_system: 'osx',
@@ -230,7 +239,7 @@ const data = [
     license_status: 'done',
   },
   {
-    id: '5',
+    id: 15,
     license_id: 'POFW',
     expire_date: 202030062359,
     operating_system: 'osx',
@@ -294,6 +303,7 @@ class Licenses extends React.Component {
           footer={null}
           closable={!this.state.isLoding}
           maskClosable={false}
+          scroll={{ x: 996 }}
         >
           <Spin tip="Loading..." spinning={this.state.isLoding}>
             <Form
