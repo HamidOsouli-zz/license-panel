@@ -2,7 +2,6 @@ const express = require('express');
 const userRouter = express.Router();
 const jwt = require('jsonwebtoken');
 import User from './../models/User.model';
-/* Get all Posts */
 userRouter.post('/login', async (req, res, next) => {
     let user = {
         username: req.body.username,

@@ -14,7 +14,6 @@ app.use(function (err, req, res, next) {
 })
 
 app.use('/user', routes.user)
-app.use('/device', routes.device);
 app.use('/license', routes.license);
 
 
