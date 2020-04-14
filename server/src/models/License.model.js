@@ -4,6 +4,7 @@ const licenseSchema = new mongoose.Schema({
     createdDate:{type:Number},
     expirationDate:{type:Number},
     os: {type: String, required: true},
+    status: {type: String, default: "PENDING"},
     userId: {type: String, required: true}
 });
 
