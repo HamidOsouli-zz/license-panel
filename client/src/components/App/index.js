@@ -44,11 +44,11 @@ class App extends React.Component {
       return (
           <div style={{ textAlign: 'right', cursor: 'pointer' }}>
             <Tooltip title="USERNAME" placement="bottomRight">
-              <span style={{ cursor: 'pointer' }}>{user.name}</span>
+              <span style={{ cursor: 'help' }}>{user.name}</span>
             </Tooltip>
 
             <Tooltip title="ROLE" placement="bottomRight">
-              <span style={{ cursor: 'pointer' }}> ({user.role}) </span>
+              <span style={{ cursor: 'help' }}> ({user.role}) </span>
             </Tooltip>
 
             <Tooltip title="LOG OUT" placement="bottomRight">

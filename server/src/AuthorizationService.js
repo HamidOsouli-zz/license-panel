@@ -7,7 +7,7 @@ export const isAdmin = async (req, res, next) => {
         if (req.header('Authorization')) {
             const authorizationHeader = removeBearer(req.header('Authorization'));
             const data = verifyJwt(authorizationHeader)
-            res.locals.user = await User.findOne({"username": data.username});
+            res.locals.user = data;
             if (res.locals.user.role === "admin") {
                 next()
             } else {
@@ -17,7 +17,7 @@ export const isAdmin = async (req, res, next) => {
             throw new Error("unAuthorize")
         }
     } catch (e) {
-        res.status(403).json({"message": e.message})
+        res.status(403).json({ "message": e.message })
     }
 };
 
@@ -35,11 +35,11 @@ export const validateJwt = async (req, res, next) => {
 
     try {
         if (!req.header('Authorization')) {
-            res.status(401).json({"message": "Bearer Authorization is required"})
+            res.status(401).json({ "message": "Bearer Authorization is required" })
         } else {
             const authorizationHeader = removeBearer(req.header('Authorization'));
             const data = verifyJwt(authorizationHeader);
-            res.locals.user = await User.findOne({"username": data.username});
+            res.locals.user = data;
             if (res.locals.user) {
                 next()
             } else {
@@ -47,21 +47,31 @@ export const validateJwt = async (req, res, next) => {
             }
         }
     } catch (e) {
-        res.status(401).json({"message": e.message})
+        res.status(401).json({ "message": e.message })
     }
 }
 export const canCreate = async (req, res, next) => {
     try {
-       License.find({"createdDate":{ $gte:moment().subtract(1, "year").format("X"), $lt:moment().format("X") }, "username": res.locals.user.username}, (err, result) => {
-           if(err){
-               throw new Error("Can not create")
-           } else if (result.length <= 6 && (result.filter(i => i.os === "Android").length <= 2) && (result.filter(i => i.os === "IOS").length <= 2) && (result.filter(i => i.os === "Windows").length <= 2)){
-                next();
-           } else {
-               throw new Error("You cant create these numbers of license")
-           }
-       });
+        if (res.locals.user.role === 'admin') {
+            next()
+        } else {
+            License.find({ "expirationDate": { $gte: new Date().getTime() }, "userId": res.locals.user.id }, (err, result) => {
+                if (err) {
+                    res.status(400).json({ "message": "There is a problem with creating license. Please try later." })
+                } else if (result.length >= 6) {
+                    res.status(400).json({ "message": "You used all your 6 licenses in this year." })
+                } else {
+                    License.find({ "expirationDate": { $gte: new Date().getTime() }, "userId": res.locals.user.id, "os": req.body.os }, (err, result) => {
+                        if (result.length >= 2) {
+                            res.status(400).json({ "message": "You used all your 2 licenses in this year for " + req.body.os + " operating system." })
+                        } else {
+                            next()
+                        }
+                    })
+                }
+            });
+        }
     } catch (e) {
-        res.status(403).json({"message": e.message})
+        res.status(403).json({ "message": e.message })
     }
 }

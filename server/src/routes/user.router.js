@@ -14,11 +14,17 @@ userRouter.post('/login', async (req, res, next) => {
     if (!foundUser) {
         res.status(401).json({"message": "Username or password is wrong"})
     }
+    const userToken = {
+        name: foundUser.username,
+        role: foundUser.role,
+        id: foundUser._id
+    }
     const accessToken = jwt.sign(
-        user,
+        userToken,
         "secret"
     );
-    await res.status(200).json({accessToken, user: foundUser});
+    userToken.accessToken = accessToken
+    await res.status(200).json({user: userToken});
 });
 
 export default userRouter;

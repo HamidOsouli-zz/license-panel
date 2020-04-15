@@ -30,5 +30,6 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Mongodb Connection Error:' + dbConnectionURL.LOCALURL));
 db.once('open', () => {
      // we're connected !
+     global.db = db
      console.log('Mongodb Connection Successful');
 });

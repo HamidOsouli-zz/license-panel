@@ -1,26 +1,26 @@
 import React from 'react'
 import moment from 'moment'
+import API from '../../lib/API'
+import authClient from '../../lib/Auth'
 
-import { PageHeader, Table, Tag, Divider, Popconfirm, message, Button, Modal, Form, Input, Select, Spin } from 'antd'
-import { QuestionCircleOutlined, PlusOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { PageHeader, Table, Tag, Divider, message, Button, Modal, Form, Input, Select, Spin } from 'antd'
+import { PlusOutlined, CheckOutlined, CloseOutlined, ExclamationCircleOutlined} from '@ant-design/icons'
 
-const { Option } = Select;
+const { Option } = Select
+const { confirm } = Modal
+const dateFormat = 'ddd, DD/MM/YYYY'
 
 function getStatusColor(status) {
   switch (status) {
-    case 'pending':
+    case 'PENDING':
       return 'default';
-    case 'done':
+    case 'ACCEPTED':
       return 'success';
-    case 'rejected':
+    case 'REJECTED':
       return 'error';
     default:
       return 'default';
   }
-}
-
-function handleConfirm() {
-  message.success('Click on Yes')
 }
 
 function compareByAlph(a, b) {
@@ -33,240 +33,287 @@ function compareByAlph(a, b) {
   return 0
 }
 
-const columns = [
-  {
-    title: 'ID',
-    dataIndex: 'id',
-    key: 'id',
-    align: 'center',
-    width: 70,
-    fixed: 'left',
-  },
-  {
-    title: 'License Id',
-    dataIndex: 'license_id',
-    key: 'license_id',
-    align: 'center',
-  },
-  {
-    title: 'Operating System',
-    dataIndex: 'operating_system',
-    key: 'operating_system',
-    align: 'center',
-  },
-  {
-    title: 'Expire Date',
-    dataIndex: 'expire_date',
-    key: 'expire_date',
-    align: 'center',
-    render: expire_date => (
-      <span>
-        {moment(expire_date).format('dddd, DD/MM/YYYY HH:mm:ss').toUpperCase()}
-      </span>
-    ),
-  },
-  {
-    title: 'User',
-    dataIndex: 'user',
-    key: 'user',
-    align: 'center',
-  },
-  {
-    title: 'Status',
-    dataIndex: 'license_status',
-    key: 'license_status',
-    align: 'center',
-    sorter: (a, b) => compareByAlph(a.license_status, b.license_status),
-    render: license_status => (
-      <span>
-        <Tag color={getStatusColor(license_status)} key={license_status}>
-          {license_status.toUpperCase()}
-        </Tag>
-      </span>
-    ),
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    fixed: 'right',
-    align: 'center',
-    width: 100,
-    render: (text, record) => {
-      if (record.license_status === 'pending') {
-        return (
-          <>
-            <Popconfirm
-              icon={<QuestionCircleOutlined style={{ color: '#1890ff' }} />}
-              title="Are you sure to CONFIRM?"
-              onConfirm={handleConfirm}
-              okText="Yes"
-              cancelText="No"
-              placement="topRight"
-            >
-              <Button type="link" size="small"><CheckOutlined /></Button>
-            </Popconfirm>
-
-            <Popconfirm
-              icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-              title="Are you sure to REJECT?"
-              onConfirm={handleConfirm}
-              okText="Yes"
-              cancelText="No"
-              placement="topRight"
-            >
-              <Button type="link" size="small" danger><CloseOutlined /></Button>
-            </Popconfirm>
-          </>
-        )
-      } else {
-        return null
-      }
-    },
-  },
-];
-
-const data = [
-  {
-    id: 1,
-    license_id: 'CFZZ',
-    expire_date: 202012312359,
-    operating_system: 'Android',
-    user: 'FARZAD',
-    license_status: 'pending',
-  },
-  {
-    id: 2,
-    license_id: 'XASD',
-    expire_date: 202012312359,
-    operating_system: 'ios',
-    user: 'PAYAM',
-    license_status: 'done',
-  },
-  {
-    id: 3,
-    license_id: 'RPGR',
-    expire_date: 202112312359,
-    operating_system: 'windows',
-    user: 'HAMID',
-    license_status: 'rejected',
-  },
-  {
-    id: 4,
-    license_id: 'POFW',
-    expire_date: 202030062359,
-    operating_system: 'osx',
-    user: 'HAMID',
-    license_status: 'done',
-  },
-  {
-    id: 5,
-    license_id: 'POFW',
-    expire_date: 202030062359,
-    operating_system: 'osx',
-    user: 'FARZAD',
-    license_status: 'rejected',
-  },
-  {
-    id: 6,
-    license_id: 'CFZZ',
-    expire_date: 202012312359,
-    operating_system: 'Android',
-    user: 'FARZAD',
-    license_status: 'pending',
-  },
-  {
-    id: 7,
-    license_id: 'XASD',
-    expire_date: 202012312359,
-    operating_system: 'ios',
-    user: 'PAYAM',
-    license_status: 'done',
-  },
-  {
-    id: 8,
-    license_id: 'RPGR',
-    expire_date: 202112312359,
-    operating_system: 'windows',
-    user: 'HAMID',
-    license_status: 'rejected',
-  },
-  {
-    id: 9,
-    license_id: 'POFW',
-    expire_date: 202030062359,
-    operating_system: 'osx',
-    user: 'HAMID',
-    license_status: 'done',
-  },
-  {
-    id: 10,
-    license_id: 'POFW',
-    expire_date: 202030062359,
-    operating_system: 'osx',
-    user: 'FARZAD',
-    license_status: 'rejected',
-  },
-  {
-    id: 11,
-    license_id: 'CFZZ',
-    expire_date: 202012312359,
-    operating_system: 'Android',
-    user: 'FARZAD',
-    license_status: 'pending',
-  },
-  {
-    id: 12,
-    license_id: 'XASD',
-    expire_date: 202012312359,
-    operating_system: 'ios',
-    user: 'PAYAM',
-    license_status: 'done',
-  },
-  {
-    id: 13,
-    license_id: 'RPGR',
-    expire_date: 202112312359,
-    operating_system: 'windows',
-    user: 'HAMID',
-    license_status: 'rejected',
-  },
-  {
-    id: 14,
-    license_id: 'POFW',
-    expire_date: 202030062359,
-    operating_system: 'osx',
-    user: 'HAMID',
-    license_status: 'done',
-  },
-  {
-    id: 15,
-    license_id: 'POFW',
-    expire_date: 202030062359,
-    operating_system: 'osx',
-    user: 'FARZAD',
-    license_status: 'rejected',
-  },
-];
-
 class Licenses extends React.Component {
-  state = { 
+  state = {
     visible: false,
-    isLoding: false
+    isLoading: false,
+    isTableLoading: false,
+    user: authClient.getUserInfo(),
+    tableData: []
+  }
+
+  tableColumns = this.state.user.role === 'admin' ? (
+    [
+      {
+        title: 'License Id',
+        dataIndex: 'license_id',
+        key: 'license_id',
+        align: 'center',
+        width: 100,
+        fixed: 'left',
+      },
+      {
+        title: 'Operating System',
+        dataIndex: 'os',
+        key: 'operating_system',
+        align: 'center',
+        render: text => (
+          <span>
+            {text.toUpperCase()}
+          </span>
+        ),
+        sorter: (a, b) => compareByAlph(a.os, b.os),
+      },
+      {
+        title: 'Created Date',
+        dataIndex: 'createdDate',
+        key: 'create_date',
+        align: 'center',
+        render: create_date => (
+          <span>
+            {moment(create_date).format(dateFormat).toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        title: 'Expiration Date',
+        dataIndex: 'expirationDate',
+        key: 'expire_date',
+        align: 'center',
+        render: expire_date => (
+          <span>
+            {moment(expire_date).format(dateFormat).toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        title: 'User',
+        dataIndex: 'userName',
+        key: 'user',
+        align: 'center',
+        sorter: (a, b) => compareByAlph(a.userName, b.userName),
+      },
+      {
+        title: 'Status',
+        dataIndex: 'status',
+        key: 'status',
+        align: 'center',
+        sorter: (a, b) => compareByAlph(a.license_status, b.license_status),
+        render: license_status => (
+          <span>
+            <Tag color={getStatusColor(license_status)} key={license_status}>
+              {license_status.toUpperCase()}
+            </Tag>
+          </span>
+        ),
+      },
+      {
+        title: 'Action',
+        key: 'action',
+        fixed: 'right',
+        align: 'center',
+        width: 100,
+        render: (text, record) => {
+          return (
+            <>
+              <Button type="link" size="small" onClick={() => this.handleAccept(record._id)} disabled={record.status !== 'PENDING'}><CheckOutlined /></Button>
+              <Button type="link" size="small" onClick={() => this.handleReject(record._id)} danger disabled={record.status !== 'PENDING'}><CloseOutlined /></Button>
+            </>
+          )
+        },
+      },
+    ]
+  ) : (
+      [
+        {
+          title: 'License Id',
+          dataIndex: 'license_id',
+          key: 'license_id',
+          align: 'center',
+          width: 100,
+          fixed: 'left',
+        },
+        {
+          title: 'Operating System',
+          dataIndex: 'os',
+          key: 'operating_system',
+          align: 'center',
+          render: text => (
+            <span>
+              {text.toUpperCase()}
+            </span>
+          ),
+        },
+        {
+          title: 'Created Date',
+          dataIndex: 'createdDate',
+          key: 'create_date',
+          align: 'center',
+          render: create_date => (
+            <span>
+              {moment(create_date).format(dateFormat).toUpperCase()}
+            </span>
+          ),
+        },
+        {
+          title: 'Expiration Date',
+          dataIndex: 'expirationDate',
+          key: 'expire_date',
+          align: 'center',
+          render: expire_date => (
+            <span>
+              {moment(expire_date).format(dateFormat).toUpperCase()}
+            </span>
+          ),
+        },
+        {
+          title: 'Status',
+          dataIndex: 'status',
+          key: 'status',
+          align: 'center',
+          sorter: (a, b) => compareByAlph(a.license_status, b.license_status),
+          render: license_status => (
+            <span>
+              <Tag color={getStatusColor(license_status)} key={license_status}>
+                {license_status.toUpperCase()}
+              </Tag>
+            </span>
+          ),
+        },
+      ]
+    )
+
+  async getTableData() {
+    this.setState({
+      isTableLoading: true
+    })
+
+    const config = {
+      method: 'get',
+      endpoint: '/license/all',
+      token: authClient.getUserToken(),
+    }
+
+    try {
+      const res = await API(config)
+      setTimeout(() => {
+        this.setState({
+          tableData: res.data.data,
+          isTableLoading: false,
+          isLoading: false,
+          visible: false
+        })
+      }, 1000)
+
+    } catch (err) {
+      this.setState({
+        isTableLoading: false
+      })
+      if (err.response && err.response.data && err.response.data.message) {
+        message.error(err.response.data.message)
+      } else {
+        message.error('There is a problem with getting the data. Please try later')
+      }
+    }
+  }
+
+  async updateLicense (licenseId, updatetype) {
+    this.setState({
+      isTableLoading: true
+    })
+
+    const config = {
+      method: 'post',
+      endpoint: '/license/update',
+      token: authClient.getUserToken(),
+      data: JSON.stringify({
+        id: licenseId,
+        action: updatetype
+      })
+    }
+
+    try {
+      await API(config)
+      setTimeout(() => {
+        this.getTableData()
+        message.success('Your license was updated')
+      }, 1000)
+    } catch (err) {
+      this.setState({
+        isTableLoading: false
+      })
+      if (err.response && err.response.data && err.response.data.message) {
+        message.error(err.response.data.message)
+      } else {
+        message.error('There is a problem with updating the license. Please try later')
+      }
+    }
+  }
+
+  addLicense = async (values) => {
+    this.setState({
+      isLoading: true
+    })
+
+    const config = {
+      method: 'post',
+      endpoint: '/license/create',
+      token: authClient.getUserToken(),
+      data: JSON.stringify({
+        os: values.operating_system,
+        license_id: values.license_id,
+      })
+    }
+
+    try {
+      await API(config)
+      setTimeout(() => {
+        this.getTableData()
+        message.success('Your license was added')
+      }, 1000)
+    } catch (err) {
+      this.setState({
+        isLoading: false
+      })
+      if (err.response && err.response.data && err.response.data.message) {
+        message.error(err.response.data.message)
+      } else {
+        message.error('There is a problem with adding the license. Please try later')
+      }
+    }
+  }
+
+  handleAccept(licenseId) {
+    const that = this
+    confirm({
+      title: 'Do you want to ACCEPT this items?',
+      icon: <ExclamationCircleOutlined />,
+      onOk() {
+        that.updateLicense(licenseId, 'accept')
+      },
+    });
+  }
+  
+  handleReject(licenseId) {
+    const that = this
+    confirm({
+      title: 'Do you want to REJECT this items?',
+      icon: <ExclamationCircleOutlined />,
+      okType: 'danger',
+      onOk() {
+        that.updateLicense(licenseId, 'reject')
+      },
+    });
+  }
+
+  componentWillMount() {
+    this.getTableData()
   }
 
   showModal = () => {
     this.setState({
       visible: true,
     })
-  }
-
-  handleFinish = values => {
-    this.setState({isLoding: true})
-    setTimeout(() => {
-      console.log(values)
-      message.success('Click on Yes')
-      this.setState({isLoding: false})
-    }, 1000)
   }
 
   handleCancel = () => {
@@ -288,12 +335,13 @@ class Licenses extends React.Component {
         <Divider dashed />
 
         <Table
-          columns={columns}
-          dataSource={data}
+          columns={this.tableColumns}
+          dataSource={this.state.tableData}
           bordered
-          rowKey={record => record.id}
+          rowKey={record => record._id}
           pagination={{ hideOnSinglePage: true }}
           scroll={{ x: 996 }}
+          loading={this.state.isTableLoading}
         />
 
         <Modal
@@ -301,15 +349,16 @@ class Licenses extends React.Component {
           visible={this.state.visible}
           onCancel={this.handleCancel}
           footer={null}
-          closable={!this.state.isLoding}
+          closable={!this.state.isLoading}
           maskClosable={false}
           scroll={{ x: 996 }}
         >
-          <Spin tip="Loading..." spinning={this.state.isLoding}>
+          <Spin spinning={this.state.isLoading}>
             <Form
               name="add_license"
               className="add_license"
-              onFinish={this.handleFinish}
+              onFinish={this.addLicense}
+              key={new Date().getTime()}
             >
               <Form.Item
                 name="license_id"
@@ -325,7 +374,6 @@ class Licenses extends React.Component {
                 <Select
                   placeholder="Select an Operating System"
                 >
-                  <Option value="osx">OSX</Option>
                   <Option value="ios">iOS</Option>
                   <Option value="android">ANDROID</Option>
                   <Option value="windows">WINDOWS</Option>

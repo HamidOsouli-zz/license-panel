@@ -34,12 +34,22 @@ db.users.insert({
     role: "admin"
 });
 db.users.insert({
-    username: "user",
-    password:"123",
-    role: "USER"
-});
-db.users.insert({
     username: "admin",
     password:"123",
     role: "admin"
+});
+db.users.insert({
+    username: "user1",
+    password:"123",
+    role: "user"
+});
+db.users.insert({
+    username: "user2",
+    password:"123",
+    role: "user"
+});
+db.users.insert({
+    username: "user3",
+    password:"123",
+    role: "user"
 });

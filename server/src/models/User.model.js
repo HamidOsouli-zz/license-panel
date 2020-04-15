@@ -10,7 +10,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    role: {type: String, default: 'USER'},
+    role: {type: String, default: 'user'},
 }, {
     toJSON: {
         transform: function (doc, ret) {

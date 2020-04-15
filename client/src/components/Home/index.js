@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-
 import authClient from '../../lib/Auth'
 
 import { PageHeader, Divider, Result, Button, Modal, Form, Input, message, Spin } from 'antd'
@@ -9,7 +8,7 @@ import { HomeTwoTone, UserOutlined, LockOutlined, LoginOutlined } from '@ant-des
 class Home extends Component {
   state = {
     visible: false,
-    isLoding: false
+    isLoading: false
   }
 
   showModal = () => {
@@ -18,27 +17,21 @@ class Home extends Component {
     })
   }
 
-  handleFinish = async (values) => {
-    this.setState({isLoding: true})
-      const data = await authClient.signIn(values);
-      if (data) {
-          this.props.history.push('/');
-          this.setState({
-              visible: false,
-          });
-      } else {
-          message.error('Wrong USERNAME or PASSWORD')
-      }
+  handleLogIn = async (values) => {
+    this.setState({ isLoading: true })
+    const data = await authClient.signIn(values)
+
     setTimeout(() => {
-      if (authClient.signIn(values)) {
-        this.props.history.push('/licenses')
+      if (data) {
+        this.props.history.push('/licenses');
         this.setState({
           visible: false,
-        })
+          isLoading: false
+        });
       } else {
+        this.setState({ isLoading: false })
         message.error('Wrong USERNAME or PASSWORD')
       }
-      this.setState({isLoding: false})
     }, 1000)
   }
 
@@ -80,14 +73,14 @@ class Home extends Component {
           visible={this.state.visible}
           onCancel={this.handleCancel}
           footer={null}
-          closable={!this.state.isLoding}
+          closable={!this.state.isLoading}
           maskClosable={false}
         >
-          <Spin tip="Loading..." spinning={this.state.isLoding}>
+          <Spin spinning={this.state.isLoading}>
             <Form
               name="normal_login"
               className="login-form"
-              onFinish={this.handleFinish}
+              onFinish={this.handleLogIn}
             >
               <Form.Item
                 name="username"

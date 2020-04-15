@@ -1,7 +1,9 @@
-import http from './http';
+import API from './API'
+
 class Auth {
   constructor() {
     this.getUserInfo = this.getUserInfo.bind(this)
+    this.getUserToken = this.getUserToken.bind(this)
     this.isAuthenticated = this.isAuthenticated.bind(this)
     this.signIn = this.signIn.bind(this)
     this.signOut = this.signOut.bind(this)
@@ -12,6 +14,11 @@ class Auth {
   getUserInfo() {
     const user = this.getUserFromLocalStorage()
     return user
+  }
+
+  getUserToken() {
+    const user = this.getUserFromLocalStorage()
+    return user.accessToken
   }
 
   isAuthenticated() {
@@ -29,15 +36,23 @@ class Auth {
     const nowDate = new Date()
     const hour = nowDate.getHours()
     const expireDate = nowDate.setHours(hour + 1)
-    try {
-      const res = await http.post("/user/login", JSON.stringify({
+    const config = {
+      method: 'post',
+      endpoint: '/user/login',
+      data: JSON.stringify({
         username: values.username,
         password: values.password
-      }));
-      this.setUserToLocalStorage({...res.data, expiresAt: expireDate});
-      return true;
-    } catch (e) {
-      return false;
+      })
+    }
+
+    try {
+      const res = await API(config)
+      res.data.user.expiresAt = expireDate
+      this.setUserToLocalStorage(res.data.user)
+      return true
+    } catch(err) {
+      console.log(err.toString())
+      return false
     }
   }
 
